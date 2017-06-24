@@ -76,3 +76,24 @@ test("toFixed() return a copy of the vector at fixed float length", (t) => {
   t.equal(fx.at(2, 2), 30.12);
   t.end();
 });
+
+test("Sum itself with another vector", (t) => {
+  const v1 = new Vector(1, 2);
+  const sum = v1.sum(new Vector(10, 20));
+  t.ok(sum.equal(new Vector(11, 22)));
+  t.end();
+});
+
+test("Diff itself with another vector", (t) => {
+  const v1 = new Vector(1, 2);
+  const diff = v1.diff(new Vector(10, 20));
+  t.ok(diff.equal(new Vector(-9, -18)));
+  t.end();
+});
+
+test("multiply itself with a scalar value", (t) => {
+  const v1 = new Vector(1, 2);
+  const mul = v1.scalar(5);
+  t.ok(mul.equal(new Vector(5, 10)));
+  t.end();
+});
