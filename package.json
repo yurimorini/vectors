@@ -1,13 +1,13 @@
 {
   "name": "vec",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "A simple Vector Lib to solve Udacity Linear Algebra Refresher Course",
   "main": "index.js",
   "scripts": {
     "test": "tape 'test/**/*.js' | tap-diff"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Yuri Morini",
+  "license": "MIT",
   "dependencies": {
     "tape": "^4.6.3"
   },
