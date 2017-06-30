@@ -97,3 +97,24 @@ test("multiply itself with a scalar value", (t) => {
   t.ok(mul.equal(new Vector(5, 10)));
   t.end();
 });
+
+test("compute the vector magnitude", (t) => {
+  const v1 = new Vector(-0.221, 7.437);
+  const v2 = new Vector(8.813, -1.331, -6.247);
+  t.equal(v1.magnitude().toFixed(3), "7.440");
+  t.equal(v2.magnitude().toFixed(3), "10.884");
+  t.end();
+});
+
+test("compute the unit vector", (t) => {
+  const v1 = new Vector(5.581, -2.136);
+  const u1 = v1.normalize().toFixed();
+  const v2 = new Vector(1.996, 3.108, -4.554);
+  const u2 = v2.normalize().toFixed();
+  t.equal(u1.at(0, 3), 0.934);
+  t.equal(u1.at(1, 3), -0.357);
+  t.equal(u2.at(0, 3), 0.34);
+  t.equal(u2.at(1, 3), 0.53);
+  t.equal(u2.at(2, 3), -0.777);
+  t.end();
+})
