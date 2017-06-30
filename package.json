@@ -12,6 +12,7 @@
     "tape": "^4.6.3"
   },
   "devDependencies": {
-    "tap-diff": "^0.1.1"
+    "tap-diff": "^0.1.1",
+    "tape-catch": "^1.0.6"
   }
 }

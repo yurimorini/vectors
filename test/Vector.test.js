@@ -1,4 +1,4 @@
-var test = require('tape');
+var test = require('tape-catch')
 var Vector = require('../lib/Vector');
 
 test('Vector throws exception if no argument is provided', (t) => {
@@ -106,7 +106,7 @@ test("compute the vector magnitude", (t) => {
   t.end();
 });
 
-test("compute the unit vector", (t) => {
+test("normalizes vector", (t) => {
   const v1 = new Vector(5.581, -2.136);
   const u1 = v1.normalize().toFixed();
   const v2 = new Vector(1.996, 3.108, -4.554);
@@ -116,5 +116,50 @@ test("compute the unit vector", (t) => {
   t.equal(u2.at(0, 3), 0.34);
   t.equal(u2.at(1, 3), 0.53);
   t.equal(u2.at(2, 3), -0.777);
+  t.end();
+})
+
+test("throw error if magnitude is 0", (t) => {
+  const norm = () => {
+    const v1 = new Vector(0, 0);
+    v1.normalize();
+  };
+  t.throws(norm, /Error/);
+  t.end();
+});
+
+test("compute the inner product of itself with another vector", (t) => {
+  t.test("-> with 2 members", (t) => {
+    const v1 = new Vector(7.887, 4.138);
+    const v2 = new Vector(-8.802, 6.776);
+    const dot = v1.inner(v2);
+    t.equal(dot.toFixed(3), "-41.382");
+    t.end();
+  });
+  t.test("-> with 3 members", (t) => {
+    const v1 = new Vector(-5.955, -4.904, -1.874);
+    const v2 = new Vector(-4.496, -8.755, 7.103);
+    const dot = v1.inner(v2);
+    t.equal(dot.toFixed(3), "56.397");
+    t.end();
+  });
+  t.end();
+});
+
+test("compute the angle between two vectors", (t) => {
+  t.test("-> with 2 members", (t) => {
+    const v1 = new Vector(3.183, -7.627);
+    const v2 = new Vector(-2.668, 5.319);
+    const angle = v1.angleRad(v2);
+    t.equal(angle.toFixed(3), "3.072");
+    t.end();
+  });
+  t.test("-> with 3 members", (t) => {
+    const v1 = new Vector(7.35, 0.221, 5.188);
+    const v2 = new Vector(2.751, 8.259, 3.985);
+    const angle = v1.angleDeg(v2);
+    t.equal(angle.toFixed(3), "60.276");
+    t.end();
+  });
   t.end();
 })
