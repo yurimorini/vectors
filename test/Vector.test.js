@@ -86,7 +86,7 @@ test("Sum itself with another vector", (t) => {
 
 test("Diff itself with another vector", (t) => {
   const v1 = new Vector(1, 2);
-  const diff = v1.diff(new Vector(10, 20));
+  const diff = v1.minus(new Vector(10, 20));
   t.ok(diff.equal(new Vector(-9, -18)));
   t.end();
 });
@@ -132,14 +132,14 @@ test("compute the inner product of itself with another vector", (t) => {
   t.test("-> with 2 members", (t) => {
     const v1 = new Vector(7.887, 4.138);
     const v2 = new Vector(-8.802, 6.776);
-    const dot = v1.innerProduct(v2);
+    const dot = v1.dotProduct(v2);
     t.equal(dot.toFixed(3), "-41.382");
     t.end();
   });
   t.test("-> with 3 members", (t) => {
     const v1 = new Vector(-5.955, -4.904, -1.874);
     const v2 = new Vector(-4.496, -8.755, 7.103);
-    const dot = v1.innerProduct(v2);
+    const dot = v1.dotProduct(v2);
     t.equal(dot.toFixed(3), "56.397");
     t.end();
   });
@@ -215,13 +215,58 @@ test("Check if is parallel to another vector", (t) => {
 });
 
 test("Find projections", (t) => {
-  t.test("-> The projection of the vector over a basis vector", (t) => {
+  t.test("-> The projection of the vector over a basis vector (v parallel)", (t) => {
     const v1 = new Vector(3.039, 1.879);
     const v2 = new Vector(0.825, 2.036);
-    const proj = v1.projectionOn(v2);
+    const proj = v1.parallelComponentTo(v2);
     t.equal(proj.at(0, 3), 1.083);
     t.equal(proj.at(1, 3), 2.672);
     t.end();
   });
 
-})
+  t.test("-> The orthoganl vector on the projection (v perpendicular)", (t) => {
+    const v1 = new Vector(-9.88, -3.264, -8.159);
+    const v2 = new Vector(-2.155, -9.353, -9.473);
+    const perp = v1.perpendicularComponentTo(v2);
+    t.equal(perp.at(0, 3), -8.35);
+    t.equal(perp.at(1, 3), 3.376);
+    t.equal(perp.at(2, 3), -1.434);
+    t.end();
+  });
+
+  t.test("-> The oroginal vector is the sum of its parallel projection and orthoganl component ", (t) => {
+    const v1 = new Vector(3.009, -6.172, 3.692, -2.51);
+    const v2 = new Vector(6.404, -9.144, 2.759, 8.718);
+    const perp = v1.perpendicularComponentTo(v2);
+    const proj = v1.parallelComponentTo(v2);
+    t.ok(v1.equal(perp.sum(proj)));
+    t.end();
+  });
+});
+
+test("Cross product", (t) => {
+  const v1 = new Vector(8.462, 7.893, -8.187);
+  const v2 = new Vector(6.984, -5.975, 4.778);
+  const cross = v1.crossProduct(v2);
+  t.equal(cross.at(0, 3), -11.205);
+  t.equal(cross.at(1, 3), -97.609);
+  t.equal(cross.at(2, 3), -105.685);
+  t.end();
+});
+
+test("Areas", (t) => {
+  t.test("-> Parallelogram area", (t) => {
+    const v1 = new Vector(-8.987, -9.838, 5.031);
+    const v2 = new Vector(-4.268, -1.861, -8.866);
+    const area = v1.parallelogramArea(v2);
+    t.equal(area.toFixed(3), "142.122");
+    t.end();
+  });
+  t.test("-> Parallelogram area", (t) => {
+    const v1 = new Vector(1.5, 9.547, 3.691);
+    const v2 = new Vector(-6.007, 0.124, 5.772);
+    const area = v1.triangleArea(v2);
+    t.equal(area.toFixed(3), "42.565");
+    t.end();
+  });
+});
