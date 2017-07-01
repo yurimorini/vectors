@@ -93,7 +93,7 @@ test("Diff itself with another vector", (t) => {
 
 test("multiply itself with a scalar value", (t) => {
   const v1 = new Vector(1, 2);
-  const mul = v1.scalar(5);
+  const mul = v1.times(5);
   t.ok(mul.equal(new Vector(5, 10)));
   t.end();
 });
@@ -132,14 +132,14 @@ test("compute the inner product of itself with another vector", (t) => {
   t.test("-> with 2 members", (t) => {
     const v1 = new Vector(7.887, 4.138);
     const v2 = new Vector(-8.802, 6.776);
-    const dot = v1.inner(v2);
+    const dot = v1.innerProduct(v2);
     t.equal(dot.toFixed(3), "-41.382");
     t.end();
   });
   t.test("-> with 3 members", (t) => {
     const v1 = new Vector(-5.955, -4.904, -1.874);
     const v2 = new Vector(-4.496, -8.755, 7.103);
-    const dot = v1.inner(v2);
+    const dot = v1.innerProduct(v2);
     t.equal(dot.toFixed(3), "56.397");
     t.end();
   });
@@ -150,16 +150,78 @@ test("compute the angle between two vectors", (t) => {
   t.test("-> with 2 members", (t) => {
     const v1 = new Vector(3.183, -7.627);
     const v2 = new Vector(-2.668, 5.319);
-    const angle = v1.angleRad(v2);
+    const angle = v1.angle(v2);
     t.equal(angle.toFixed(3), "3.072");
     t.end();
   });
   t.test("-> with 3 members", (t) => {
     const v1 = new Vector(7.35, 0.221, 5.188);
     const v2 = new Vector(2.751, 8.259, 3.985);
-    const angle = v1.angleDeg(v2);
+    const angle = v1.angle(v2, true);
     t.equal(angle.toFixed(3), "60.276");
     t.end();
   });
   t.end();
+});
+
+test("Cannot compute with the zero vector", (t) => {
+  const norm = () => {
+    const v1 = new Vector(0, 0);
+    const v2 = new Vector(2, 3);
+    v1.angle(v2);
+  };
+  t.throws(norm, /Error/);
+  t.end();
+});
+
+test("Check if is orthogonal to another vector", (t) => {
+  const v1 = new Vector(-7.579, -7.88);
+  const v2 = new Vector(22.737, 23.64);
+  t.notOk(v1.isOrthogonal(v2));
+
+  const v3 = new Vector(-2.029, 9.97, 4.172);
+  const v4 = new Vector(-9.231, -6.639, -7.245);
+  t.notOk(v3.isOrthogonal(v4));
+
+  const v5 = new Vector(-2.328, -7.284, -1.214);
+  const v6 = new Vector(-1.821, 1.072, -2.94);
+  t.ok(v5.isOrthogonal(v6));
+
+  const v7 = new Vector(2.118, 4.827);
+  const v8 = new Vector(0, 0);
+  t.ok(v7.isOrthogonal(v8));
+
+  t.end();
+});
+
+test("Check if is parallel to another vector", (t) => {
+  const v1 = new Vector(-7.579, -7.88);
+  const v2 = new Vector(22.737, 23.64);
+  t.ok(v1.isParallel(v2));
+
+  const v3 = new Vector(-2.029, 9.97, 4.172);
+  const v4 = new Vector(-9.231, -6.639, -7.245);
+  t.notOk(v3.isParallel(v4));
+
+  const v5 = new Vector(-2.328, -7.284, -1.214);
+  const v6 = new Vector(-1.821, 1.072, -2.94);
+  t.notOk(v5.isParallel(v6));
+
+  const v7 = new Vector(2.118, 4.827);
+  const v8 = new Vector(0, 0);
+  t.ok(v7.isParallel(v8));
+
+  t.end();
+});
+
+test("Find projections", (t) => {
+  t.test("-> The projection of the vector over a basis vector", (t) => {
+    const v1 = new Vector(3.039, 1.879);
+    const v2 = new Vector(0.825, 2.036);
+    const proj = v1.projectionOn(v2);
+    t.equal(proj.at(0, 3), 1.083);
+    t.equal(proj.at(1, 3), 2.672);
+    t.end();
+  });
+
 })
